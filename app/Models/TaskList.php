@@ -8,10 +8,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class TaskList extends Model
 {
+    protected $table = 'lists';
     protected $fillable = [
         'title',
         'description',
-
         'user_id',
     ];
 

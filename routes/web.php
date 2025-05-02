@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ListController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -8,6 +9,7 @@ Route::get('/', function () {
 })->name('home');
 
 Route::middleware(['auth', 'verified'])->group(function () {
+    Route::resource('lists', ListController::class);
     Route::get('dashboard', function () {
         return Inertia::render('dashboard');
     })->name('dashboard');
