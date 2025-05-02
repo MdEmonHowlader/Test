@@ -15,13 +15,14 @@ class TaskList extends Model
         'user_id',
     ];
 
-    public function tasks():HasMany
+    public function tasks(): HasMany
     {
-        return $this->HasMany(Task::class);
+        return $this->hasMany(Task::class);
     }
+
     public function user(): BelongsTo
     {
-        return $this->BelongsTo(User::class);
+        return $this->belongsTo(User::class);
     }
 
 }
