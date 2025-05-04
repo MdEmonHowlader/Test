@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Models\Task;
 use App\Models\TaskList;
 use Illuminate\Http\Request;
@@ -13,40 +14,48 @@ class TaskController extends Controller
      */
     public function index()
     {
-        $query =Task::with('list')->whereHas('list', function ($query){
-            $query->where('user_id', auth()->id());
+        $query = Task::with('list')
+            ->whereHas('list', function ($query) {
+                $query->where('user_id', auth()->id());
+            })
+            ->orderBy('created_at', 'desc');
 
-        })->orderBy('created_at', 'desc');
+        // Handle search
+        if (request()->has('search')) {
+            $search = request('search');
+            $query->where(function($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                  ->orWhere('description', 'like', "%{$search}%");
+            });
+        }
 
-        if(request('search')) {
-           $search= request('search');
-           $query->where(function($q) use ($search){
-            $q->where('title', 'like', "%{$search}%")->orWhere('description', 'like', "%{$search}%");
-           });
+        // Handle completion filter
+        if (request()->has('filter') && request('filter') !== 'all') {
+            $query->where('is_completed', request('filter') === 'completed');
         }
-        if(request()->has('fillter')&& request('fillter') !== 'all'){
-            $query->where('is_completed', request('fillter')=== 'completed');
-        }
-        $tasks =$query->paginate(10);
+
+        $tasks = $query->paginate(10);
+
         $lists = TaskList::where('user_id', auth()->id())->get();
+
         return Inertia::render('Tasks/Index', [
             'tasks' => $tasks,
             'lists' => $lists,
-            'filters' => request()->all(['search', 'fillter']),
-            'falsh' => [
-                'success' => session('success'),
-                'error' => session('error'),
+            'filters' => [
+                'search' => request('search', ''),
+                'filter' => request('filter', 'all'),
             ],
+            'flash' => [
+                'success' => session('success'),
+                'error' => session('error')
+            ]
         ]);
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
-    {
-        //
-    }
+ 
 
     /**
      * Store a newly created resource in storage.
@@ -54,56 +63,52 @@ class TaskController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'title' => 'required|max:255',
+            'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'due_date' => 'nullable|date',
-            'is_completed' => 'boolean',
-            'list_id' => 'required|exists:task_lists,id',
+            'list_id' => 'required|exists:lists,id',
+            'is_completed' => 'boolean'
         ]);
+
         Task::create($validated);
-        return redirect()->back()->with('success', 'Task created successfully.');
+
+        return redirect()->route('tasks.index')->with('success', 'Task created successfully!');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
-    {
-        //
-    }
+   
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
-    {
-        //
-    }
+   
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request,Task $task)
+    public function update(Request $request, Task $task)
     {
         $validated = $request->validate([
-            'title' => 'required|max:255',
+            'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'due_date' => 'nullable|date',
             'is_completed' => 'boolean',
-            'list_id' => 'required|exists:task_lists,id',
+            'list_id' => 'required|exists:lists,id'
         ]);
+
         $task->update($validated);
-        return redirect()->back()->with('success', 'Task created successfully.');
+
+        return redirect()->route('tasks.index')->with('success', 'Task updated successfully!');
     }
 
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(Task $task)
-   
     {
-        
         $task->delete();
-        return redirect()->back()->with('success', 'Task deleted successfully.');
+        return redirect()->route('tasks.index')->with('success', 'Task deleted successfully!');
     }
 }
