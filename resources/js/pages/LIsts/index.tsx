@@ -112,42 +112,56 @@ export default function ListsIndex({ lists, flash }: Props) {
                         ) : (
                             <XCircle className="h-5 w-5" />
                         )}
-                        <span>{toastMessage}</span>                    </div>)}
+                        <span>{toastMessage}</span>
+                    </div>)}
 
                 <div className="flex justify-between items-center">
-                    <h1 className="text-2xl font-bold">Lists</h1>                    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+                    <h1 className="text-2xl font-bold">Lists</h1>
+                    <Dialog open={isOpen} onOpenChange={setIsOpen}>
                         <DialogTrigger  >
                             <Button>
                                 <Plus className="h-4 w-4 mr-2" />
                                 New List
-                            </Button>                        </DialogTrigger>                        <DialogContent>
+                            </Button>
+                        </DialogTrigger>
+                        <DialogContent>
                             <DialogHeader>
-                                <DialogTitle>{editingList ? 'Edit List' : 'Create New List'}</DialogTitle>                            </DialogHeader>                            <form onSubmit={handleSubmit} className="space-y-4">
+                                <DialogTitle>{editingList ? 'Edit List' : 'Create New List'}</DialogTitle>
+                            </DialogHeader>
+                            <form onSubmit={handleSubmit} className="space-y-4">
                                 <div className="space-y-2">
-                                    <Label htmlFor="title">Title</Label>                                    <Input id="title"
+                                    <Label htmlFor="title">Title</Label>
+                                    <Input id="title"
                                         value={data.title}
                                         onChange={(e) => setData('title', e.target.value)}
                                         required />
                                 </div>
                                 <div className="space-y-2">
-                                    <Label htmlFor="description">Description</Label>                                    <Textarea id="description"
+                                    <Label htmlFor="description">Description</Label>
+                                    <Textarea id="description"
                                         value={data.description}
                                         onChange={(e) => setData('description', e.target.value)}
                                     />
                                 </div>                                <Button type="submit" disabled={processing}>
                                     {editingList ? 'Update' : 'Create'}
-                                </Button>                            </form>                        </DialogContent>                    </Dialog>                </div>
+                                </Button>
+                            </form>
+                        </DialogContent>
+                    </Dialog>
+                </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {lists.map((list) => (
                         <Card key={list.id} className="hover:bg-accent/50 transition-colors">
                             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                                <CardTitle className="text-lg font-medium">{list.title}</CardTitle>                                <div className="flex gap-2">
+                                <CardTitle className="text-lg font-medium">{list.title}</CardTitle>
+                                <div className="flex gap-2">
                                     <Button variant="ghost"
                                         size="icon"
                                         onClick={() => handleEdit(list)}
                                     >
                                         <Pencil className="h-4 w-4" />
-                                    </Button>                                    <Button
+                                    </Button>
+                                    <Button
                                         variant="ghost"
                                         size="icon"
                                         onClick={() => handleDelete(list.id)}
@@ -156,15 +170,19 @@ export default function ListsIndex({ lists, flash }: Props) {
                                         <Trash2 className="h-4 w-4" />
                                     </Button>
                                 </div>
-                            </CardHeader>                            <CardContent>
+                            </CardHeader>
+                            <CardContent>
                                 <p className="text-sm text-muted-foreground">
                                     {list.description || 'No description'}
                                 </p>
                                 {list.tasks_count !== undefined && (
                                     <p className="text-sm text-muted-foreground mt-2">
-                                        {list.tasks_count} Tasks                                    </p>
+                                        {list.tasks_count} Tasks
+                                    </p>
                                 )}
-                            </CardContent>                        </Card>))}
+                            </CardContent>
+                        </Card>))}
                 </div>
-            </div>        </AppLayout>);
+            </div>
+        </AppLayout>);
 }

@@ -179,44 +179,62 @@ export default function TasksIndex({ tasks, lists, filters, flash }: Props) {
                         ) : (
                             <XCircle className="h-5 w-5" />
                         )}
-                        <span>{toastMessage}</span>                    </div>)}
+                        <span>{toastMessage}</span>
+                    </div>)}
 
                 <div className="flex justify-between items-center">
                     <div>
-                        <h1 className="text-3xl font-bold tracking-tight">Tasks</h1>                        <p className="text-muted-foreground mt-1">Manage your tasks and stay organized</p>                    </div>                    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+                        <h1 className="text-3xl font-bold tracking-tight">Tasks</h1>
+                        <p className="text-muted-foreground mt-1">Manage your tasks and stay organized</p>
+                    </div>
+                    <Dialog open={isOpen} onOpenChange={setIsOpen}>
                         <DialogTrigger  >
                             <Button className="bg-primary hover:bg-primary/90 text-white shadow-lg">
                                 <Plus className="h-4 w-4 mr-2" />
                                 New Task
-                            </Button>                        </DialogTrigger>                        <DialogContent className="sm:max-w-[425px]">
+                            </Button>
+                        </DialogTrigger>
+                        <DialogContent className="sm:max-w-[425px]">
                             <DialogHeader>
-                                <DialogTitle className="text-xl">{editingTask ? 'Edit Task' : 'Create New Task'}</DialogTitle>                            </DialogHeader>                            <form onSubmit={handleSubmit} className="space-y-4">
+                                <DialogTitle className="text-xl">{editingTask ? 'Edit Task' : 'Create New Task'}</DialogTitle>
+                            </DialogHeader>
+                            <form onSubmit={handleSubmit} className="space-y-4">
                                 <div className="space-y-2">
-                                    <Label htmlFor="title">Title</Label>                                    <Input id="title"
+                                    <Label htmlFor="title">Title</Label>
+                                    <Input id="title"
                                         value={data.title}
                                         onChange={(e) => setData('title', e.target.value)}
                                         required className="focus:ring-2 focus:ring-primary"
                                     />
                                 </div>
                                 <div className="space-y-2">
-                                    <Label htmlFor="description">Description</Label>                                    <Textarea id="description"
+                                    <Label htmlFor="description">Description</Label>
+                                    <Textarea id="description"
                                         value={data.description}
                                         onChange={(e) => setData('description', e.target.value)}
                                         className="focus:ring-2 focus:ring-primary"
                                     />
-                                </div>                                <div className="space-y-2">
-                                    <Label htmlFor="list_id">List</Label>                                    <Select value={data.list_id}
+                                </div>
+                                <div className="space-y-2">
+
+                                    <Label htmlFor="list_id">List</Label>
+                                    <Select value={data.list_id}
                                         onValueChange={(value) => setData('list_id', value)}
                                     >
                                         <SelectTrigger className="focus:ring-2 focus:ring-primary">
                                             <SelectValue placeholder="Select a list" />
-                                        </SelectTrigger>                                        <SelectContent>
+                                        </SelectTrigger>
+                                        <SelectContent>
                                             {lists.map((list) => (
                                                 <SelectItem key={list.id} value={list.id.toString()}>
                                                     {list.title}
                                                 </SelectItem>))}
-                                        </SelectContent>                                    </Select>                                </div>                                <div className="space-y-2">
-                                    <Label htmlFor="due_date">Due Date</Label>                                    <Input id="due_date"
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+                                <div className="space-y-2">
+                                    <Label htmlFor="due_date">Due Date</Label>
+                                    <Input id="due_date"
                                         type="date"
                                         value={data.due_date}
                                         onChange={(e) => setData('due_date', e.target.value)}
@@ -231,15 +249,19 @@ export default function TasksIndex({ tasks, lists, filters, flash }: Props) {
                                         onChange={(e) => setData('is_completed', e.target.checked)}
                                         className="h-4 w-4 rounded border-gray-300 focus:ring-2 focus:ring-primary"
                                     />
-                                    <Label htmlFor="is_completed">Completed</Label>                                </div>                                <Button
-                                        type="submit"
-                                        disabled={processing}
-                                        className="w-full bg-primary hover:bg-primary/90 text-white shadow-lg"
-                                    >
+                                    <Label htmlFor="is_completed">Completed</Label>
+                                </div>
+                                <Button
+                                    type="submit"
+                                    disabled={processing}
+                                    className="w-full bg-primary hover:bg-primary/90 text-white shadow-lg"
+                                >
                                     {editingTask ? 'Update' : 'Create'}
                                 </Button>
                             </form>
-                        </DialogContent>                    </Dialog>                </div>
+                        </DialogContent>
+                    </Dialog>
+                </div>
                 <div className="flex gap-4 mb-4">
                     <form onSubmit={handleSearch} className="relative flex-1">
                         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -248,13 +270,20 @@ export default function TasksIndex({ tasks, lists, filters, flash }: Props) {
                             onChange={(e) => setSearchTerm(e.target.value)}
                             className="pl-10"
                         />
-                    </form>                    <Select value={completionFilter}
+                    </form>
+                    <Select value={completionFilter}
                         onValueChange={handleFilterChange}
                     >
                         <SelectTrigger className="w-[180px]">
                             <SelectValue placeholder="Filter by status" />
-                        </SelectTrigger>                        <SelectContent>
-                            <SelectItem value="all">All Tasks</SelectItem>                            <SelectItem value="completed">Completed</SelectItem>                            <SelectItem value="pending">Pending</SelectItem>                        </SelectContent>                    </Select>                </div>
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="all">All Tasks</SelectItem>
+                            <SelectItem value="completed">Completed</SelectItem>
+                            <SelectItem value="pending">Pending</SelectItem>
+                        </SelectContent>
+                    </Select>
+                </div>
                 <div className="rounded-md border">
                     <div className="relative w-full overflow-auto">
                         <table className="w-full caption-bottom text-sm">
@@ -263,7 +292,13 @@ export default function TasksIndex({ tasks, lists, filters, flash }: Props) {
                                     <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Title</th>
                                     <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Description</th>
                                     <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">List</th>
-                                    <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Due Date</th>                                    <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Status</th>                                    <th className="h-12 px-4 text-right align-middle font-medium text-muted-foreground">Actions</th>                                </tr>                            </thead>                            <tbody className="[&_tr:last-child]:border-0">
+                                    <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Due Date</th>
+                                    <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Status</th>
+                                    <th className="h-12 px-4 text-right align-middle font-medium text-muted-foreground">Actions</th>
+                                </tr>
+
+                            </thead>
+                            <tbody className="[&_tr:last-child]:border-0">
                                 {tasks.data.map((task) => (
                                     <tr key={task.id} className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
                                         <td className="p-4 align-middle font-medium">{task.title}</td>
@@ -289,11 +324,14 @@ export default function TasksIndex({ tasks, lists, filters, flash }: Props) {
                                             {task.is_completed ? (
                                                 <div className="flex items-center gap-2 text-green-500">
                                                     <CheckCircle className="h-4 w-4" />
-                                                    <span>Completed</span>                                                </div>
+                                                    <span>Completed</span>
+                                                </div>
                                             ) : (
                                                 <div className="flex items-center gap-2 text-yellow-500">
-                                                    <span>Pending</span>                                                </div>)}
+                                                    <span>Pending</span>
+                                                </div>)}
                                         </td>
+
                                         <td className="p-4 align-middle text-right">
                                             <div className="flex justify-end gap-2">
                                                 <Button variant="ghost"
@@ -302,23 +340,29 @@ export default function TasksIndex({ tasks, lists, filters, flash }: Props) {
                                                     className="hover:bg-primary/10 hover:text-primary"
                                                 >
                                                     <Pencil className="h-4 w-4" />
-                                                </Button>                                                <Button variant="ghost"
+                                                </Button>
+                                                <Button variant="ghost"
                                                     size="icon"
                                                     onClick={() => handleDelete(task.id)}
                                                     className="hover:bg-destructive/10 hover:text-destructive"
                                                 >
                                                     <Trash2 className="h-4 w-4" />
-                                                </Button>                                            </div>
+                                                </Button>
+                                            </div>
                                         </td>
                                     </tr>
                                 ))}
                                 {tasks.data.length === 0 && (
                                     <tr>
                                         <td colSpan={6} className="p-4 text-center text-muted-foreground">
-                                            No tasks foreground                                        </td>
+                                            No tasks foreground
+                                        </td>
                                     </tr>
                                 )}
-                            </tbody>                        </table>                    </div>                </div>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
                 {/* Pagination */}
                 <div className="flex items-center justify-between px-2">
                     <div className="text-sm text-muted-foreground">
@@ -345,8 +389,11 @@ export default function TasksIndex({ tasks, lists, filters, flash }: Props) {
                             disabled={tasks.current_page === tasks.last_page}
                         >
                             <ChevronRight className="h-4 w-4" />
-                        </Button>                    </div>                </div>            </div>        </AppLayout>);
+                        </Button>
+                    </div>
+                </div>
+            </div>
+        </AppLayout>);
 }
 
 
- 
