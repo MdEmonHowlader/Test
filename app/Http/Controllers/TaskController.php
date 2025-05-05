@@ -20,7 +20,7 @@ class TaskController extends Controller
             })
             ->orderBy('created_at', 'desc');
 
-        // Handle search
+  
         if (request()->has('search')) {
             $search = request('search');
             $query->where(function($q) use ($search) {
@@ -29,7 +29,6 @@ class TaskController extends Controller
             });
         }
 
-        // Handle completion filter
         if (request()->has('filter') && request('filter') !== 'all') {
             $query->where('is_completed', request('filter') === 'completed');
         }

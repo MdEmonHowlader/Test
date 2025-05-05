@@ -7,7 +7,7 @@ use App\Models\TaskList;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
-class DashboardController extends Controller
+class DashbordController extends Controller
 {
     public function index()
     {
